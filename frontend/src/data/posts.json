@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "title": "First post",
+    "summary": "description placeholder",
+    "imgURL": "https://picsum.photos/id/1024/400",
+    "likes": 67,
+    "liked": false,
+    "pinned": false,
+    "comments": 15
+  },
+  {
+    "id": 1,
+    "title": "Second post",
+    "summary": "description placeholder",
+    "imgURL": "https://picsum.photos/id/1024/400",
+    "likes": 67,
+    "liked": true,
+    "pinned": true,
+    "comments": 15
+  },
+  {
+    "id": 2,
+    "title": "Third post",
+    "summary": "description placeholder",
+    "imgURL": "https://picsum.photos/id/1024/400",
+    "likes": 67,
+    "liked": true,
+    "pinned": false,
+    "comments": 15
+  }
+]

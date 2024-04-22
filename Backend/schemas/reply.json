@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "reply": {
+        "id": "/reply",
+        "title": "Reply",
+        "description": "A reply to a comment on a post",
+        "type": "object",
+        "properties": {
+          "allText": {
+            "description": "Main text of the social media reply",
+            "type": "string"
+          },
+          "userID": {
+            "description": "User ID of the user responding to a comment",
+            "type": ["integer", "null"]
+          }
+        },
+        "required": ["allText"]
+      },
+      "replyCreated": {
+        "$id": "#replyCreated",
+        "title": "Reply Created",
+        "description": "Confirmation of a successful reply update/creation",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the new/updated reply",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve reply",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+}

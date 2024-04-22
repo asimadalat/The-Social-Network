@@ -1,0 +1,49 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "comment": {
+        "id": "/comment",
+        "title": "Comment",
+        "description": "A comment on a post",
+        "type": "object",
+        "properties": {
+          "allText": {
+            "description": "Main text of the social media comment",
+            "type": "string"
+          },
+          "imageURL": {
+            "description": "URL for optional image to show in comment",
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "userID": {
+            "description": "User ID of the commenter",
+            "type": ["integer", "null"]
+          }
+        },
+        "required": ["allText"]
+      },
+      "commentCreated": {
+        "$id": "#commentCreated",
+        "title": "Comment Created",
+        "description": "Confirmation of a successful comment update/creation",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the new/updated comment",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve comment",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+}
+    

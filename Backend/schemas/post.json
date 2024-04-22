@@ -1,0 +1,58 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "post": {
+        "id": "/post",
+        "title": "Post",
+        "description": "A post on the feed",
+        "type": "object",
+        "properties": {
+          "title": {
+            "description": "Main title of the social media post",
+            "type": "string"
+          },
+          "bodyText": {
+            "description": "Body text of the social media post",
+            "type": "string"
+          },
+          "imageURL": {
+            "description": "URL for main image to show in post",
+            "type": ["string", "null"],
+            "format": "uri"
+          },
+          "published": {
+            "description": "Is the post published or not",
+            "type": ["boolean", "null"]
+          },
+          "userID": {
+            "description": "User ID of the poster",
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "required": ["title", "bodyText"]
+      },
+      "postCreated": {
+        "$id": "#postCreated",
+        "title": "Post Created",
+        "description": "Confirmation of a successful post update/creation",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the new/updated post",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve post",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+}
+    

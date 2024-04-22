@@ -1,0 +1,66 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+      "user": {
+        "id": "/user",
+        "title": "User",
+        "description": "A user social media account",
+        "type": "object",
+        "properties": {
+          "name": {
+            "description": "Optional alias of user",
+            "type": ["string", "null"]
+          },
+          "username": {
+            "description": "Unique identifier",
+            "type": "string",
+            "minLength": 6
+          },
+          "bio": {
+            "description": "Optional short description about user",
+            "type": ["string", "null"]
+          },
+          "password": {
+            "description": "Used to authenticate user",
+            "type": "string",
+            "minLength": 6
+          },
+          "email": {
+            "description": "Email address of user",
+            "type": "string",
+            "format": "email"
+          },
+          "avatarURL": {
+            "description": "Optional avatar image",
+            "type": ["string", "null"],
+            "format": "uri"
+          }
+        },
+        "required": ["username", "password"]
+      },
+      "userCreated": {
+        "$id": "#userCreated",
+        "title": "User Created",
+        "description": "Confirmation of a successful user update/creation",
+        "type": "object",
+        "properties": {
+          "ID": {
+            "description": "ID of the new/updated user record",
+            "type": "integer"
+          },
+          "updated": {
+            "description": "Boolean indicator of success",
+            "type": "boolean"
+          },
+          "link": {
+            "description": "Path to retrieve user record",
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    }
+}
+    
+  
+  

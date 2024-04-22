@@ -1,0 +1,613 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Back End Social Media API
+  description: A social media API including user, post and comment resources.
+  contact:
+    name: Asim
+    email: adalata@uni.coventry.ac.uk
+  license:
+    name: Apache 2.0
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+  - url: 'https://ecology-fiction-3000.codio-box.uk/api/v1'
+    description: Development server
+  - url: 'localhost:3000/api/v1'
+    description: Local server
+tags:
+  - name: Users
+    description: API endpoints for user management.
+  - name: Posts
+    description: Access and perform CRUD operations on posts.
+  - name: Comments
+    description: Access and perform CRUD operations on comments.
+  - name: Replies
+    description: Access and perform CRUD operations on replies.
+  - name: Likes
+    description: Add or remove likes from a resource.
+  - name: Views
+    description: Retrieve number of instances resource accessed by ID.
+  - name: Logs
+    description: Log data concerning user actions.
+paths:
+  /users/{id}/full:
+    summary: Represents an individual user's full record.
+    description: >
+      This resource represents an individual user in the system.
+      Each user is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the user.
+    get:
+      tags:
+        - Users
+      description:
+        Get full user by id.
+      responses:
+        '200':
+          description: View of a user's record, excluding password, email, role.
+        '401':
+          description: Only authenticated users can view a full record.
+        '403':
+          description: Only administrators or the account owner can view the full record.
+        '404':
+          description: User was not found in the DB.
+  /users/{id}:
+    summary: Represents an individual user.
+    description: >
+      This resource represents an individual user in the system.
+      Each user is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the user.
+    get:
+      tags:
+        - Users
+      description:
+        Get user by id.
+      responses:
+        '200':
+          description: View of a user's record, excluding password, email, role.
+        '404':
+          description: User was not found in the DB.
+    put:
+      tags:
+        - Users
+      description:
+        Update user by ID.
+      requestBody:
+        description: Existing user data, including edited data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./user.json#/definitions/user
+      responses:
+        '200':
+          description: Update confirmation and link to record.
+          content:
+            application/json:
+              schema:
+                $ref: ./post.json#/definitions/postCreated
+        '400':
+          description: Request data not as expected.
+        '401':
+          description: Only authenticated users can update a record.
+        '403':
+          description: Only administrators or the account owner can update the full record.
+        '404':
+          description: User was not found in the DB.
+    delete:
+      tags:
+        - Users
+      description:
+        Delete user by ID.
+      responses:
+        '200':
+          description: Delete confirmation.
+        '401':
+          description: Only authenticated users can delete user accounts.
+        '403':
+          description: Only administrators or account owners can delete user accounts.
+        '404':
+          description: User was not found in the DB.
+  /users:
+    summary: Represents the user resource.
+    description: >
+      This resource represents the system's user resource.
+    post:
+      tags:
+        - Users
+      description:
+        Create a new user account.
+      requestBody:
+        description: All new user data.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./user.json#/definitions/user
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: ./user.json#/definitions/userCreated
+        '400':
+          description: Request data not as expected.
+    get:
+      tags:
+        - Users
+      description:
+        Retrieve all user accounts.
+      responses:
+        '200':
+          description: All registered users.
+        '401':
+          description: Only authenticated users can view all users.
+        '403':
+          description: Only an administrator can view all users.
+        '404':
+          description: No users found in the DB.
+  /posts/{id}/likes/{userId}:
+    summary: Endpoint to add and remove likes
+    description: >
+      This resource represents an like/remove like action in the system.
+      Post to associated with action is identified by a numeric `id`.
+      User associated with action is identified by a numeric `userId`.
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+        - in: path
+          name: userId
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the user
+    post:
+      tags:
+        - Likes
+      description:
+        Leave a like on a post
+      responses:
+        '201':
+          description: Liked response
+        '401':
+          description: Only authenticated users can like a post.
+        '409':
+          description: Cannot like twice response
+    delete:
+      tags:
+        - Likes
+      description:
+        Remove a like on a post
+      responses:
+        '200':
+          description: Removed like response
+        '401':
+          description: Only authenticated users can remove a like from a post.
+        '409':
+          description: No like to remove response
+  /posts/{id}/likes:
+    summary: Represents an individual post like count
+    description: >
+      This resource represents an individual like count in the system.
+      The associated post is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+    get:
+      tags:
+        - Likes
+      description:
+        Retrieve like count of a post
+      responses:
+        '200':
+          description: Numeric like count, 0 if null
+  /posts/{id}/views:
+    summary: Represents an individual post view count
+    description: >
+      This resource represents an individual view count in the system.
+      The associated post is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+    get:
+      tags:
+        - Views
+      description:
+        Retrieve view count of a post
+      responses:
+        '200':
+          description: Numeric view count
+        '404':
+          description: Post was not found in the DB.
+  /posts/{id}:
+    summary: Represents an individual post.
+    description: >
+      This resource represents an individual post in the system.
+      Each post is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the post
+    get:
+      tags:
+        - Posts
+      description:
+        Get post by id.
+      responses:
+        '200':
+          description: View of a post.
+        '404':
+          description: Post was not found in the DB.
+    put:
+      tags:
+        - Posts
+      description:
+        Update post by ID.
+      requestBody:
+        description: Existing post data, including edited data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./post.json#/definitions/post
+      responses:
+        '200':
+          description: Update confirmation and link to record.
+          content:
+            application/json:
+              schema:
+                $ref: ./post.json#/definitions/postCreated
+        '400':
+          description: Request data not as expected.
+        '401':
+          description: Only authenticated users can update posts.
+        '403':
+          description: Only the owner of a post or an admin user can update it.
+        '404':
+          description: Post was not found in the DB.
+    delete:
+      tags:
+        - Posts
+      description:
+        Delete post by ID.
+      responses:
+        '200':
+          description: Delete confirmation.
+        '401':
+          description: Only authenticated users can delete posts.
+        '403':
+          description: Only the owner of a post or an admin user can delete it.
+        '404':
+          description: Post was not found in the DB.
+  /posts:
+    summary: Represents the post resource.
+    description: >
+      This resource represents the system's post resource.
+    post:
+      tags:
+        - Posts
+      description:
+        Create a new post.
+      requestBody:
+        description: All new post data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./post.json#/definitions/post
+      responses:
+        '201':
+          description: Post created
+          content:
+            application/json:
+              schema:
+                $ref: ./post.json#/definitions/postCreated
+        '400':
+          description: Request data not as expected.
+        '401':
+          description: Only authenticated users can create posts.
+    get:
+      tags:
+        - Posts
+      description:
+        Retrieve all posts.
+      responses:
+        '200':
+          description: All posts.
+        '404':
+          description: No posts found in the DB.
+  /posts/{postID}/comments/{id}:
+    summary: Represents an individual comment.
+    description: >
+      This resource represents an individual comment in the system.
+      The associated post is identified by a numeric `postID`.
+      Each comment is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: postID
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the comment
+    get:
+      tags:
+        - Comments
+      description:
+        Get comment by id.
+      responses:
+        '200':
+          description: View of a comment.
+        '404':
+          description: Comment was not found in the DB.
+    put:
+      tags:
+        - Comments
+      description:
+        Update comment by ID.
+      requestBody:
+        description: Existing comment data, including edited data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./comment.json#/definitions/comment
+      responses:
+        '200':
+          description: Update confirmation and link to record.
+          content:
+            application/json:
+              schema:
+                $ref: ./comment.json#/definitions/commentCreated
+        '400':
+          description: Request data not as expected.
+        '401':
+          description: Only authenticated users can update comments.
+        '403':
+          description: Only the owner of a comment or an admin user can update it.
+        '404':
+          description: Comment was not found in the DB.
+    delete:
+      tags:
+        - Comments
+      description:
+        Delete comment by ID.
+      responses:
+        '200':
+          description: Delete confirmation.
+        '401':
+          description: Only authenticated users can delete posts.
+        '403':
+          description: Only the owner of a comment or an admin user can delete it.
+        '404':
+          description: Comment was not found in the DB.
+  /posts/{postID}/comments:
+    summary: Represents the comment resource.
+    description: >
+      This resource represents the system's comment resource.
+      The associated post is identified by a numeric `postID`.
+    parameters:
+        - in: path
+          name: postID
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+    post:
+      tags:
+        - Comments
+      description:
+        Create a new comment.
+      requestBody:
+        description: All new comment data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./comment.json#/definitions/comment
+      responses:
+        '201':
+          description: Comment created
+          content:
+            application/json:
+              schema:
+                $ref: ./comment.json#/definitions/commentCreated
+        '400':
+          description: Request data not as expected.
+        '401':
+          description: Only authenticated users can create comments.
+    get:
+      tags:
+        - Comments
+      description:
+        Retrieve all comments.
+      responses:
+        '200':
+          description: All comments.
+        '404':
+          description: No comments found in the DB.
+  /posts/{postID}/comments/{commentID}/replies/{id}:
+    summary: Represents an individual reply.
+    description: >
+      This resource represents an individual reply in the system.
+      The associated post is identified by a numeric `postID`.
+      The associated comment is identified by a numeric `commentID`.
+      Each reply is identified by a numeric `id`.
+    parameters:
+        - in: path
+          name: postID
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+        - in: path
+          name: commentID
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the comment
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the reply
+    get:
+      tags:
+        - Replies
+      description:
+        Get reply by id.
+      responses:
+        '200':
+          description: View of a reply.
+        '404':
+          description: Reply was not found in the DB.
+    put:
+      tags:
+        - Replies
+      description:
+        Update reply by ID.
+      requestBody:
+        description: Existing reply data, including edited data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./reply.json#/definitions/reply
+      responses:
+        '200':
+          description: Update confirmation and link to record.
+          content:
+            application/json:
+              schema:
+                $ref: ./reply.json#/definitions/replyCreated
+        '400':
+          description: Request data not as expected.
+        '401':
+          description: Only authenticated users can update replies.
+        '403':
+          description: Only the owner of a reply or an administrator can update it.
+        '404':
+          description: Reply was not found in the DB.
+    delete:
+      tags:
+        - Replies
+      description:
+        Delete reply by ID.
+      responses:
+        '200':
+          description: Delete confirmation.
+        '401':
+          description: Only authenticated users can delete replies.
+        '403':
+          description: Only the owner of a reply or an administrator can delete it.
+        '404':
+          description: Reply was not found in the DB.
+  /posts/{postID}/comments/{commentID}/replies:
+    summary: Represents the reply resource.
+    description: >
+      This resource represents the system's reply resource.
+      The associated post is identified by a numeric `postID`.
+      The associated comment is identified by a numeric `commentID`.
+    parameters:
+        - in: path
+          name: postID
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the associated post
+        - in: path
+          name: commentID
+          schema:
+            type: integer
+          required: true
+          description: Numeric id of the comment
+    post:
+      tags:
+        - Replies
+      description:
+        Create a new reply.
+      requestBody:
+        description: All new reply data
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ./reply.json#/definitions/reply
+      responses:
+        '201':
+          description: Reply created
+          content:
+            application/json:
+              schema:
+                $ref: ./reply.json#/definitions/replyCreated
+        '400':
+          description: Request data not as expected.
+        '404':
+          description: Reply was not found in the DB.
+    get:
+      tags:
+        - Replies
+      description:
+        Retrieve all replies.
+      responses:
+        '200':
+          description: All replies.
+        '404':
+          description: No replies found in the DB.
+  /logs:
+    summary: Represents the log resource.
+    description: >
+      This resource represents the system's log resource.
+    get:
+      tags:
+        - Logs
+      description:
+        Retrieve all logs.
+      responses:
+        '200':
+          description: All logs.
+        '401':
+          description: Only an authenticated user can view logs.
+        '403':
+          description: Only an administrator can view logs.
+        '404':
+          description: No logs found in the DB.
+
+
+
+
+
+

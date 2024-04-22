@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "codio",
+    "database": "6003cem_coursework",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": "codio",
+    "database": "6003cem_coursework_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "root",
+    "password": "codio",
+    "database": "database_production",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

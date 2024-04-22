@@ -1,0 +1,32 @@
+[
+  {
+    "id": 0,
+    "user": "User12923",
+    "allText": "description placeholder",
+    "imgURL": "https://www.pinclipart.com/picdir/middle/157-1578186_user-profile-default-image-png-clipart.png",
+    "likes": 67,
+    "liked": false,
+    "replies": 15,
+    "post_id": 1
+  },
+  {
+    "id": 1,
+    "user": "3r ",
+    "allText": "Great post!!",
+    "imgURL": "https://picsum.photos/id/1024/400",
+    "likes": 67,
+    "liked": true,
+    "replies": 15,
+    "post_id": 0
+  },
+  {
+    "id": 2,
+    "user": "F4re",
+    "allText": "Very informative, I was able to learn loads. Thank you.",
+    "imgURL": "https://picsum.photos/id/1024/400",
+    "likes": 67,
+    "liked": true,
+    "replies": 15,
+    "post_id": 2
+  }
+]

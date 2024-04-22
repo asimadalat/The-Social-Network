@@ -1,0 +1,47 @@
+{
+  "name": "coursework-api",
+  "version": "1.0.0",
+  "description": "6003CEM Coursework",
+  "main": "index.js",
+  "scripts": {
+    "test": "cross-env DB_DATABASE=6003cem_coursework_test jest --testTimeout=10000",
+    "test:watch": "cross-env DB_DATABASE=6003cem_coursework_test jest --watch",
+    "test:watchAll": "cross-env DB_DATABASE=6003cem_coursework_test jest --watchAll",
+    "testDB:drop": "mysql --user=root --password=codio -e \"DROP DATABASE 6003cem_coursework_test;\"",
+    "testDB:create": "mysql --user=root --password=codio -e \"CREATE DATABASE 6003cem_coursework_test;\"",
+    "testDB:migrate": "mysqldump --user=root --password=codio 6003cem_coursework | mysql --user=root --password=codio 6003cem_coursework_test",
+    "pretest": "npm run testDB:drop && npm run testDB:create && npm run testDB:migrate"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@koa/cors": "^5.0.0",
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.5",
+    "fs": "^0.0.1-security",
+    "jsonschema": "^1.4.1",
+    "koa": "^2.15.0",
+    "koa-bodyparser": "^4.4.1",
+    "koa-passport": "^6.0.0",
+    "koa-router": "^12.0.1",
+    "mysql2": "^3.9.2",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.1",
+    "path": "^0.12.7",
+    "promise-mysql": "^5.2.0",
+    "role-acl": "^4.5.4",
+    "sequelize": "^6.37.1",
+    "sequelize-cli": "^6.6.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.4"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  }
+}
